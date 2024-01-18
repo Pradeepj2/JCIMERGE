@@ -164,11 +164,11 @@ int count = (int) request.getAttribute("count") + 1;
 												class="form-control" name="contract_qty" id="contract_qty"
 												type="number" readonly>
 										</div>
-										<div class="col-sm-3 form-group">
+									<!-- 	<div class="col-sm-3 form-group">
 											<label class="required">Contract Value</label> <input
 												class="form-control" name="contractValue" id="contractValue"
 												type="number" readonly>
-										</div>
+										</div> -->
 
 
 									</div>
@@ -307,7 +307,7 @@ var count = 0;
 										$("#list").html(htmlTable); 
 										$("#contract_qty").val(sum);
 										$("#count").val(count);
-										$("#contractValue").val(TotelContractedValue);
+										//$("#contractValue").val(TotelContractedValue);
 								
 									}
 								});

@@ -48,19 +48,21 @@ public class PCSOReqLetterDaoImpl implements PCSOReqLetterDao {
 
 	@Override
 	public List<PCSORequestLetter> getTopThreeRecords(String cropString) {
-		String sqlString = "select Top 3 * from jcipcso_gen where crop_year='" + cropString
-				+ "' ORDER by creation_date desc";
+		String sqlString = "select Top 5 * from jcipcso_gen ORDER by ReqGenDate desc";
+		
+//		String sqlString = "select Top 5 * from jcipcso_gen where crop_year='" + cropString
+//				+ "' ORDER by ReqGenDate desc";
 		List<Object[]> list = currentSession().createSQLQuery(sqlString).list();
 
 		List<PCSORequestLetter> reqList = new ArrayList<>();
 
 		for (Object[] reqObjects : list) {
 			PCSORequestLetter requestLetter = new PCSORequestLetter();
-			requestLetter.setReference_no((String) reqObjects[3]);
-			requestLetter.setCropYear((String) reqObjects[6]);
-			requestLetter.setReqGenDate((String) reqObjects[7]);
-			requestLetter.setSys_avail_qty((Double) reqObjects[5]);
-			requestLetter.setReq_qty((Double) reqObjects[4]);
+			requestLetter.setReference_no((String) reqObjects[5]);
+			requestLetter.setCropYear((String) reqObjects[2]);
+			requestLetter.setReqGenDate((String) reqObjects[6]);
+			requestLetter.setSys_avail_qty((Double) reqObjects[8]);
+			requestLetter.setReq_qty((Double) reqObjects[7]);
 			requestLetter.setCreation_date((Date) reqObjects[1]);
 
 			reqList.add(requestLetter);

@@ -95,6 +95,7 @@ import com.jci.model.RoDetailsModel;
 import com.jci.model.RoDispatchModel;
 import com.jci.model.StateList;
 import com.jci.model.settlemetCnDnModel;
+import com.jci.service.DailyPurchaseModelConfService;
 import com.jci.service.DistrictService;
 import com.jci.service.PurchaseCenterService;
 import com.jci.service.RoDetailsService;
@@ -119,6 +120,8 @@ import com.jci.service.Impl_phase2.EmailSender;
 import com.jci.service_phase2.PcsoentryService;
 import com.jci.service_phase2.RoDispatchService;
 import com.lowagie.text.DocumentException;
+
+import antlr.TokenWithIndex;
 
 import java.util.Calendar;
 
@@ -183,6 +186,9 @@ public class Controller_V {
 	RoDetailsService roDetailsservice;
 
 	@Autowired
+	DailyPurchaseModelConfService dailyPurchaseModelConfService;
+
+	@Autowired
 	PurchaseCenterService purchaseCenterService;
 
 	@Autowired
@@ -213,6 +219,13 @@ public class Controller_V {
 		String cropYearString = (String) request.getSession().getAttribute("currCropYear");
 		double contractedQty = genReqLetterService.getTotalContractedQty(cropYearString);
 		ModelAndView mv = new ModelAndView("PCSORequestLetter");
+
+		List<String> cropYearList = dailyPurchaseModelConfService.getCropYear();
+		List<Double> jute = dailyPurchaseModelConfService.firstLeveljute("2023-2024", "msp");
+		List<Integer> bale = dailyPurchaseModelConfService.firstLevelbale("2023-2024", "msp");
+		mv.addObject("jute", jute);
+		mv.addObject("bale", bale);
+
 		mv.addObject("totalContract", contractedQty);
 		if (username == null) {
 			mv = new ModelAndView("index");
@@ -220,12 +233,16 @@ public class Controller_V {
 
 		List<PCSORequestLetter> topThreeRecords = genReqLetterService.getTopThreeRecords(cropYearString);
 		mv.addObject("topThreeRecords", topThreeRecords);
+		mv.addObject("distinctCropYear", cropYearList);
 
 		return mv;
 	}
 
 	@Value("${upload.letterHeadPath}")
 	String letterHeadPath;
+
+	@Value("${upload.SignaturePdf}")
+	String SignaturePdf;
 
 	@RequestMapping("generatePCSORequest")
 	public ModelAndView generatePCSORequestLetter(HttpServletRequest request, RedirectAttributes redirectAttributes)
@@ -241,8 +258,8 @@ public class Controller_V {
 
 		String referenceno = request.getParameter("referenceno");
 		String reqDate = request.getParameter("reqDate");
-		String crop_year = request.getParameter("crop_year");
-		double system_qty = Double.parseDouble(request.getParameter("uncontractedQty"));
+		String crop_year = request.getParameter("cropyr");
+		 double system_qty = Double.parseDouble(request.getParameter("uncontractedQty"));
 		double req_qty = Double.parseDouble(request.getParameter("reqQty"));
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 //		 String dateString = request.getParameter("date");
@@ -264,7 +281,7 @@ public class Controller_V {
 
 		PdfGenerator pdfGenerator = new PdfGenerator();
 		pdfGenerator.generatePdfOfRequestLetter(referenceno, crop_year, creation_date, req_qty + "",
-				referenceno + ".pdf", requestLetterpath, letterHeadPath);
+				referenceno + ".pdf", requestLetterpath, letterHeadPath, SignaturePdf);
 
 		redirectAttributes.addFlashAttribute("msg",
 				"<div class=\"alert alert-success\"><b>Success !</b> Record created successfully.</div>\r\n" + "");
@@ -299,7 +316,7 @@ public class Controller_V {
 				+ "Thanks & Regards \n " + "Jute Corporation Of India";
 
 		InternetAddress[] toAddresses = { new InternetAddress("pradeep.rathor@cyfuture.com"),
-				new InternetAddress("pradeeprao31110@gmail.com") };
+				new InternetAddress("pradeepcyf24@gmail.com") };
 
 		SendMail sendMail = new SendMail();
 
@@ -429,16 +446,27 @@ public class Controller_V {
 	// Entry Of PCSO
 	// ---------------------------------------------------------
 	@RequestMapping("entryofpcso")
-	public ModelAndView EntryofpcsoModel(HttpServletRequest request) {
+	public ModelAndView EntryofpcsoModel(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		String username = (String) request.getSession().getAttribute("usrname");
 		ModelAndView mv = new ModelAndView("entryofpcso");
 		String referenceno = request.getParameter("referenceno");
 		if (referenceno != null) {
-			String referencedate = request.getParameter("referencedate");
 			String pcsodate = request.getParameter("pcsodate");
+			String pcsoReqdate = request.getParameter("pcsoReqDate");
+			String pcsoQty = request.getParameter("pcsoQty");
+			String pcsoReqQty = request.getParameter("pcsoReqQty");
+			String letterRefNo = request.getParameter("letterRefNo");
+			String juteRatio = request.getParameter("juteRatio");
+			String dispatchPeriod = request.getParameter("dispatchPeriod");
+
 			mv.addObject("referenceno", referenceno);
-			mv.addObject("referencedate", referencedate);
+			mv.addObject("pcsoQty", pcsoQty);
+			mv.addObject("pcsoReqQty", pcsoReqQty);
 			mv.addObject("pcsodate", pcsodate);
+			mv.addObject("pcsoReqdate", pcsoReqdate);
+			mv.addObject("letterRefNo", letterRefNo);
+			mv.addObject("dispatchPeriod", dispatchPeriod);
+			mv.addObject("juteRatio", juteRatio);
 
 		}
 		final List<Object[]> allentryofpcsolist = this.pcsoentryservice.getAlldata();
@@ -463,11 +491,12 @@ public class Controller_V {
 			List<EntryofpcsoModel> ll = new ArrayList<EntryofpcsoModel>();
 			int count = Integer.valueOf(request.getParameter("count"));
 			String referenceno = request.getParameter("referenceno");
-			String referencedate = request.getParameter("referencedate");
-			String pcsodate = request.getParameter("pcsodate");
-			String deliveryPeriod = request.getParameter("deliveryPeriod");
-			String juteRatio = request.getParameter("juteRatio");
+			String pcsoDate = request.getParameter("pcsoDate");
+			String dispatchPeriod = request.getParameter("dispatchPeriod");
 			String letterRef = request.getParameter("letterRefNo");
+			String pcsoReqDate = request.getParameter("pcsoReqdate");
+			String juteRatio = request.getParameter("juteRatio");
+			Double pcsoReqQty = Double.parseDouble(request.getParameter("pcsoReqQty"));
 			Double pcsoQty = Double.parseDouble(request.getParameter("pcsoQty"));
 
 //			EntryofpcsoModel entryofpcso = new EntryofpcsoModel();
@@ -480,13 +509,16 @@ public class Controller_V {
 
 				EntryofpcsoModel entryofpcsoCopy = new EntryofpcsoModel();
 				entryofpcsoCopy.setCreated_date(new Date());
-				entryofpcsoCopy.setDeliveryPeriod(deliveryPeriod);
+				entryofpcsoCopy.setDispatch_period(dispatchPeriod);
 				entryofpcsoCopy.setJuteRatio(juteRatio);
 				entryofpcsoCopy.setLetterPath("/localsystem");
 				entryofpcsoCopy.setLetterRef(letterRef);
-				entryofpcsoCopy.setPcso_date(pcsodate);
+				// entryofpcsoCopy.setPcso_date(pcsodate);
+				entryofpcsoCopy.setPcso_req_date(pcsoReqDate);
+				entryofpcsoCopy.setPcso_date(pcsoDate);
+				entryofpcsoCopy.setPcsoReqQty(pcsoReqQty);
 				entryofpcsoCopy.setPcsoQty(pcsoQty);
-				entryofpcsoCopy.setReference_date(referencedate);
+				// entryofpcsoCopy.setReference_date(referencedate);
 				entryofpcsoCopy.setReference_no(referenceno);
 
 				String millcode = request.getParameter("millcode" + c);
@@ -504,12 +536,13 @@ public class Controller_V {
 
 			mv.addObject("entryofpcso", ll);
 			mv.addObject("referenceno", referenceno);
-			mv.addObject("referencedate", referencedate);
-			mv.addObject("pcsodate", pcsodate);
+			mv.addObject("pcsoReqDate", pcsoReqDate);
+			mv.addObject("pcsoDate", pcsoDate);
 			mv.addObject("letterRef", letterRef);
 			mv.addObject("juteRatio", juteRatio);
-			mv.addObject("deliveryPeriod", deliveryPeriod);
+			mv.addObject("deliveryPeriod", dispatchPeriod);
 			mv.addObject("pcsoQty", pcsoQty);
+			mv.addObject("pcsoReqQty", pcsoReqQty);
 
 		} catch (Exception e) {
 			System.out.println(e);
@@ -526,12 +559,13 @@ public class Controller_V {
 			int count = Integer.valueOf(request.getParameter("count"));
 			Date date = new Date();
 			String referenceno = request.getParameter("referenceno");
-			String referencedate = request.getParameter("referencedate");
-			String pcsodate = request.getParameter("pcsodate");
+			String pcsDate = request.getParameter("pcsoDate");
+			String pcsoReqdate = request.getParameter("pcsoReqDate");
 			String sumoftotalallocation = request.getParameter("sumoftotalallocation");
 			Double pcsoQty = Double.parseDouble(request.getParameter("pcsoQty"));
+			Double pcsoReqQty = Double.parseDouble(request.getParameter("pcsoReqQty"));
 
-			String deliveryPeriod = request.getParameter("deliveryPeriod");
+			String dispatchPeriod = request.getParameter("dispatchPeriod");
 			String juteRatio = request.getParameter("juteRatio");
 			String letterRef = request.getParameter("letterRefNo");
 
@@ -539,15 +573,16 @@ public class Controller_V {
 
 				// default values
 				EntryofpcsoModel entryofpcso = new EntryofpcsoModel();
-				entryofpcso.setDeliveryPeriod(deliveryPeriod);
+				entryofpcso.setDispatch_period(dispatchPeriod);
 				entryofpcso.setJuteRatio(juteRatio);
 				entryofpcso.setLetterPath("/localsystem");
 				entryofpcso.setLetterRef(letterRef);
 				entryofpcso.setReference_no(referenceno);
-				entryofpcso.setReference_date(referencedate);
-				entryofpcso.setPcso_date(pcsodate);
+				entryofpcso.setPcso_req_date(pcsoReqdate);
+				entryofpcso.setPcso_date(pcsDate);
 				entryofpcso.setCreated_date(date);
 				entryofpcso.setPcsoQty(pcsoQty);
+				entryofpcso.setPcsoReqQty(pcsoReqQty);
 
 				// dynamic values
 				String millcode = request.getParameter("millcode" + i);
@@ -1375,6 +1410,7 @@ public class Controller_V {
 		final Double actualWt = Double.parseDouble(request.getParameter("ActualWeight"));
 		final String roId = request.getParameter("roId");
 		final String invoiceVal = request.getParameter("invoiceValue");
+		final String ChallanNo = request.getParameter("ChallanNo");
 		final String contractNo = request.getParameter("contractNo");
 
 		int Count = creditNoteGenerationService.getCountOfRo(roId);
@@ -1383,6 +1419,7 @@ public class Controller_V {
 		session.setAttribute("ContractNo", contractNo);
 		session.setAttribute("nominalWeight", nominalWt);
 		session.setAttribute("ActualWeight", actualWt);
+		session.setAttribute("ChallanNo", ChallanNo);
 		session.setAttribute("roId", roId);
 		session.setAttribute("Count", Count);
 		session.setAttribute("invoiceVal", invoiceVal);
@@ -1411,6 +1448,7 @@ public class Controller_V {
 		final String shipmentDetails = request.getParameter("shipment");
 		final String crnDate = request.getParameter("cnDate");
 		final String crnNo = request.getParameter("cnNo");
+		final String ChallanNo = request.getParameter("ChallanNo");
 		final String contractNo = request.getParameter("contractNo");
 
 		final Double shortQty = Double.parseDouble(request.getParameter("shortQty"));
@@ -1427,6 +1465,7 @@ public class Controller_V {
 		creditNotes.setCreated_by(refId + "");
 		creditNotes.setCreationDate(new Date());
 		creditNotes.setCrnAmount(crnAmount);
+		creditNotes.setChallanNo(ChallanNo);
 		creditNotes.setContractNo(contractNo);
 		creditNotes.setCrnNo(crnNo);
 		creditNotes.setCrnDate(crnDate);

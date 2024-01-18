@@ -699,11 +699,13 @@ public class Controller_V {
 		}
 
 		List<String> pcso = pcsoentryservice.getAllDates();
+		List<Object> allJuteCombination = entryofGradeCompositionService.getAllJuteCombination();
 		int count = pcsoentryservice.getCountOfTotalEntries();
 		List<String> gradeCompositionLable = pcsoentryservice.getAllLables();
 		mv.addObject("pcsoDates", (Object) pcso);
 		mv.addObject("count", count);
 		mv.addObject("gradeCompositionLable", gradeCompositionLable);
+		mv.addObject("allJuteVariety", allJuteCombination);
 		return mv;
 	}
 

@@ -49,14 +49,6 @@
 	content: " *";
 	color: red;
 }
-
-.visible {
-	display: "block";
-}
-
-.hide {
-	display: "none";
-}
 </style>
 
 
@@ -94,19 +86,6 @@ String contactIdnNo = "BT00" + count;
 								<form method="POST">
 
 									<div class="row">
-
-										<!-- 	<div class="col-sm-4 form-group">
-											<label>Delivery Type</label> <select
-												class="form-control pcso" name="deliveryType"
-												id="deliveryType" required>
-												<option disabled selected>-Select-</option>
-												<option value="Ex-Godown">Ex-Godown</option>
-												<option value="Mill-Delivery">Mill Delivery</option>
-
-											</select>
-										</div> -->
-
-
 										<div class="col-sm-5 form-group">
 											<label>Crop Year</label> <input class="form-control"
 												name="crop_year" id="crop_year" value="<%=cropYear%>"
@@ -147,7 +126,7 @@ String contactIdnNo = "BT00" + count;
 											List<Date> pcsoDates = (List<Date>) request.getAttribute("pcsoDates");
 											%>
 											<select data-placeholder='Choose Dates..'
-												class='chosen-select form-control pcso' multiple
+												class='chosen-select form-control pcso pcso_date' multiple
 												tabindex='3' name="pcso_date" id="pcso_date" required>
 												<option disabled>-Select-</option>
 												<%
@@ -159,8 +138,8 @@ String contactIdnNo = "BT00" + count;
 												}
 												%>
 											</select>
-										</div> --%>
-
+										</div>
+ --%>
 
 
 									</div>
@@ -169,7 +148,8 @@ String contactIdnNo = "BT00" + count;
 
 
 
-									<%-- <div class="col-sm-3 form-group">
+									<%-- 
+									<div class="col-sm-3 form-group">
 
 											<label class="required">Contact Date</label> <input
 												class="form-control" name="contractDate" id="contactDate"
@@ -184,34 +164,9 @@ String contactIdnNo = "BT00" + count;
 										</div>
 							  --%>
 
-									<div class="ibox-body" id="">
+									<div class="ibox-body" id="gradeCompostion">
 
 										<div class="row">
-
-											<div class="col-sm-4 form-group">
-
-												<%
-												LocalDate obj = LocalDate.now();
-												//LocalDate obj = LocalDate.of(2020, 1, 8)
-
-												int currentyear = obj.getYear();
-												int nextyear = 0;
-												int month = obj.getMonthValue();
-
-												if (month >= 7) {
-													nextyear = currentyear + 1;
-												} else {
-													nextyear = currentyear;
-													currentyear -= 1;
-												}
-												%>
-
-												<label>Crop Year </label> <select name="crop_year"
-													id="crop_year" class="form-control" required>
-													<option disabled selected value>-Select-</option>
-													<option value="<%=currentyear%>-<%=nextyear%>"><%=currentyear%>-<%=nextyear%></option>
-												</select>
-											</div>
 
 											<div class="col-sm-4 form-group">
 												<label>Available Qty</label> <input name="available_qty"
@@ -224,8 +179,7 @@ String contactIdnNo = "BT00" + count;
 											<div class="col-sm-4 form-group">
 												<label>Label Name</label> <input name="labelname"
 													id="labelname" type="text" class="form-control"
-													value="<%=contactIdnNo%>/<%=cropYear%>" required /> <span
-													id="labelMsg" class="text-danger"></span>
+													value="<%=contactIdnNo%>/<%=cropYear%>" readonly />
 											</div>
 										</div>
 
@@ -268,8 +222,8 @@ String contactIdnNo = "BT00" + count;
 														<%
 														if (i == 1) {
 														%>
-														<td class="col-sm-2"><input type="text" name="remark"
-															class="form-control" required /></td>
+														<td class="col-sm-2"><textarea name="remark"
+																class="form-control" required></textarea></td>
 														<%
 														}
 														%>
@@ -298,16 +252,53 @@ String contactIdnNo = "BT00" + count;
 									</div>
 
 
+									<div class="ibox-body row" id="contractgeneration"
+										style="visibility: hidden;">
+
+										<div class="col-sm-4 form-group">
+											<label class="required">PCSO Date</label>
+
+											<%
+											List<Date> pcsoDates = (List<Date>) request.getAttribute("pcsoDates");
+											%>
+											<select data-placeholder='Choose Dates..'
+												class='chosen-select form-control pcso' multiple
+												tabindex='3' name="pcso_date" id="pcso_date" required>
+												<option disabled>-Select-</option>
+												<%
+												for (int p = 0; p < pcsoDates.size(); p++) {
+												%>
+												<option value="<%=pcsoDates.get(p)%>"><%=pcsoDates.get(p)%>
+												</option>
+												<%
+												}
+												%>
+											</select>
+										</div>
+
+
+										<div class="col-sm-3 form-group">
+
+											<label class="required">Contact Date</label> <input
+												class="form-control" name="contractDate" id="contactDate"
+												type="text" readonly
+												value="<%=new java.text.SimpleDateFormat("dd-MM-yyyy").format(new java.util.Date())%>">
+										</div>
+
+										<div class="col-sm-3 form-group">
+											<label class="required">Contract Qty.</label> <input
+												class="form-control" name="contract_qty" id="contract_qty"
+												type="number" readonly>
+										</div>
+									</div>
 
 
 									<div class="row">
 										<input class="form-control" type="hidden" name="count"
 											id="count">
 										<div class=" col-sm-4 form-group">
-											<button class="btn btn-success" type="btn">Submit</button>
-
+											<button class="btn btn-warning" type="button" id="toggle">Next</button>
 										</div>
-									</div>
 								</form>
 
 								<div id="list"></div>
@@ -330,6 +321,44 @@ String contactIdnNo = "BT00" + count;
 </body>
 <script src="assets/css/chosen.jquery.js" type="text/javascript"></script>
 
+<script>
+var flag = 1;
+$("#toggle").on("click" , function(){
+	
+	
+	//grade composition validations
+	
+	let totel = 0;
+	for (var i = 1; i <='<%=sizeOfJuteVariey%>'; i++) {
+		let temp = $('#grade' + i).val();
+		if (temp == '') temp = 0;
+		totel += parseFloat(temp);
+	}
+
+	if ((+totel != 100)) {
+		document.getElementById("error").innerHTML = "total should be 100 !";
+		return false;
+	} else {
+		document.getElementById("error").innerHTML = "";
+	}
+	
+	/////////////////////////////////////////////////////////////////////
+	
+	
+	//display properties
+
+	document.getElementById("gradeCompostion").style.setProperty('display',flag==1 ? 'none' : 'block');
+	document.getElementById("contractgeneration").style.setProperty('visibility',flag==1 ? 'visible' : 'hidden');
+    flag = flag == 1 ? 0 : 1;
+	document.getElementById("toggle").innerHTML = flag == 1 ? "Next" : "Prev";
+	
+	//////////////
+
+	//document.getElementById('gradeCompostion').className='hide';
+	//document.getElementById('gradeCompostion').classList.add('hide');
+})
+
+</script>
 
 
 <script>
@@ -348,8 +377,7 @@ var count = 0;
 						listOfTotalQty = [];
 						contractedValueMillWise = [];
 						
-						
-						var gradeComp = $("#gradeComp").val();
+						 
 						//var deliveryType = $("#deliveryType").val();
 
 						$("#pcso_date").find("option:selected").each(function() {
@@ -365,8 +393,6 @@ var count = 0;
 					    	
 					    	$("#list").html("<div></div>");
 					    	$("#contract_qty").val(0);
-							
-							$("#contractValue").val(0.0);
 					    	return;
 					    }
 					    

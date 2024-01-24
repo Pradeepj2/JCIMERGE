@@ -694,7 +694,7 @@ public class Controller_V {
 		ModelAndView mv = new ModelAndView("contractgeneration");
 
 		if (username == null) {
-			mv = new ModelAndView("index");
+			//mv = new ModelAndView("index");
 			return mv;
 		}
 

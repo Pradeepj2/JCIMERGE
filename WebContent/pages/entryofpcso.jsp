@@ -15,6 +15,24 @@
 	width: 100%;
 	height: 32px;
 }
+
+#btn-back-to-top {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 100;
+	display: none;
+}
+
+
+.fixedCol {
+	position: fixed;  
+	z-index: 100;
+	top : 56px;
+	padding:5px;
+	background: #f1f1f1;
+}
+
 </style>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,7 +41,8 @@
 <!-- GLOBAL MAINLY STYLES-->
 <link href="./assets/vendors/bootstrap/dist/css/bootstrap.min.css"
 	rel="stylesheet" />
-<link href="./assets/vendors/font-awesome/css/font-awesome.min.css"
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 	rel="stylesheet" />
 <link href="./assets/vendors/themify-icons/css/themify-icons.css"
 	rel="stylesheet" />
@@ -56,6 +75,12 @@
 			<div class="page-heading">
 				<h1 class="page-title">Entry of PCO (Production Control Order)</h1>
 			</div>
+
+			<button type="button" class="btn btn-success btn-floating btn-lg"
+				id="btn-back-to-top">
+				<i class="fas fa-arrow-up"></i>
+			</button>
+
 
 			<%
 			List<Object[]> allentryofpcsolist = (List<Object[]>) request.getAttribute("entryofpcsolist");
@@ -93,7 +118,7 @@
 							</div>
 							<div class="ibox-body">
 								<form action="entryofpcsosave.obj" method="POST">
-									<div class="fixedCol">
+									<div class="fixedCol row">
 										<div class="row">
 
 
@@ -174,7 +199,7 @@
 
 										</div>
 									</div>
-									<div class="row">
+									<div class="row" style="margin-top: 45px;">
 										<div class="col-sm-4 form-group ">
 											<label class="font-weight-bold">Mill Code</label>
 										</div>
@@ -265,6 +290,38 @@
 				dateFormat : 'dd-mm-yy'
 			}); */
 	</script>
+
+
+
+	<script type="text/javascript">
+		var mybutton = document.getElementById("btn-back-to-top");
+
+		// When the user scrolls down 20px from the top of the document, show the button
+		window.onscroll = function() {
+			scrollFunction();
+		};
+
+		function scrollFunction() {
+			if (document.body.scrollTop > 20
+					|| document.documentElement.scrollTop > 20) {
+				mybutton.style.display = "block";
+			} else {
+				mybutton.style.display = "none";
+			}
+		}
+ 
+		let options = {top: 0, left: 0, behavior: 'smooth'};  
+		mybutton.addEventListener('click', () => { window.scroll(options) });
+				 
+	</script>
+
+
+
+
+
+
+
+
 
 	<script>
 		$("#pcsoDate").on(

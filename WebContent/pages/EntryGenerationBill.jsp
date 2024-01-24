@@ -285,7 +285,7 @@
 	                                     <div class="row"> 
                                              
 									               <div class="col-sm-0.7 form-group">
-												             <input type="submit" value="Generate"class="btn btn-primary" id="submit">
+												             <input type="submit" value="GenThokoerate"class="btn btn-primary" id="submit">
 												            </div>
 									         <!--   <div class="clear">
 												  <button type="submit" value="submit" name="subscribe" id="mc-embedded-subscribe" class="submit- btn btn-default" onclick="window.open('https://login.mailchimp.com/signup'), window.location = 'https://google.com'">Submit</button>
@@ -294,7 +294,7 @@
 												   <!-- <input type="cancel" value="cancel"class="btn btn-primary" id="cancel"> -->
 												    <!--   <input type='submit' name='submit' id='submitBtn' class='enableOnInput' disabled='disabled' /> -->
       
-										        <button class="enableOnInput" type="button" id='submitBtn'  disabled='disabled' onclick="rejectAndNavigate()">cancel</button>
+										        <button class="enableOnInput" type="button" id='submitBtn'  disabled='disabled' onclick="rejectAndNavigate()">Remove</button>
 										           
 									             </div> 
 									            </div>

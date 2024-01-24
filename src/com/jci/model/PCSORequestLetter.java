@@ -32,7 +32,7 @@ public class PCSORequestLetter {
 	@Column(name = "creation_date", length = 30)
 	private Date creation_date;
 	
-	@Column(name = "RequestGenreationDate", length = 30)
+	@Column(name = "ReqGenDate", length = 30)
 	private String reqGenDate;
 	
 	@Column(name = "crop_year", length = 255)

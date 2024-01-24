@@ -41,7 +41,7 @@ public class PdfGenerator {
 
 	public void generatePdf(String jciRefNo, String millNameString, String millCode, Double qty, String cropyear,
 			List<Object[]> priceList, List<Object[]> compList, String fileName, String deliveryType,
-			String contractDate, String filePath , String letterHeadPath) throws DocumentException, IOException {
+			String contractDate, String filePath, String letterHeadPath) throws DocumentException, IOException {
 
 		PdfWriter pdfWriter = new PdfWriter(filePath);
 		PdfDocument pdfDocument = new PdfDocument(pdfWriter);
@@ -62,7 +62,7 @@ public class PdfGenerator {
 
 		Table table = new Table(widthOfTwoColumn);
 
-		 Image letterHead = new Image(ImageDataFactory.create(letterHeadPath));
+		Image letterHead = new Image(ImageDataFactory.create(letterHeadPath));
 
 //		Table headerTable = new Table(widthOfHeader);
 //		Image logoImage = new Image(ImageDataFactory
@@ -195,7 +195,7 @@ public class PdfGenerator {
 	}
 
 	public void generatePdfOfRequestLetter(String jciRefNo, String cropyear, String date, String qty, String fileName,
-			String path , String letterHeadPath) throws DocumentException, IOException {
+			String path, String letterHeadPath, String signaturePath) throws DocumentException, IOException {
 
 		final File theDir = new File(path);
 		if (!theDir.exists()) {
@@ -222,8 +222,13 @@ public class PdfGenerator {
 		float columnWidth20 = fullWidth * 0.20f;
 		float widthOfTwoColumn[] = { columnHalfWidth, columnHalfWidth };
 		float widthOfHeader[] = { columnWidth20, columnWidth60, columnWidth20 };
-
-		 Image letterHead = new Image(ImageDataFactory.create(letterHeadPath));
+      
+		Image letterHead = new Image(ImageDataFactory.create(letterHeadPath));
+		Image signature = new Image(ImageDataFactory.create(signaturePath));
+		
+		signature.setWidth(140);
+		signature.setHeight(60);
+		signature.setRelativePosition(25,0,0,0);
 
 		// Setting font of the text
 
@@ -289,8 +294,8 @@ public class PdfGenerator {
 						+ dateArray[2] + " so that MSP stock may be liquidated. " + "\n" + "Thanking You ");
 
 		Table tableForSignature = new Table(widthOfTwoColumn);
-		Paragraph signatueParagraph = new Paragraph().add("Yours faithfully, \n \n \n \n \n ")
-				.add("( Kalyan Mazumdar ) \n").add("General Manager (Operation & Marketing)")
+		Paragraph signatueParagraph = new Paragraph().add("Yours faithfully,\n").add(signature)
+				.add( "\n ( Kalyan Mazumdar ) \n").add("General Manager (Operation & Marketing)")
 				.setTextAlignment(TextAlignment.CENTER);
 
 		tableForSignature.addCell(new Cell().add("").setBorder(Border.NO_BORDER));
@@ -298,7 +303,7 @@ public class PdfGenerator {
 				new Cell().add(signatueParagraph).setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT));
 
 		Paragraph copyToParagraph = new Paragraph()
-				.add("Copy to : \n" + "\t\t\t1. Shri. Molony Chandan Ckarabortty (Jute Commissioner), Kolkata. \n");
+				.add("Copy to : \n" + "\t\t\t1. Shri. Moloy Chandan Ckarabortty (Jute Commissioner), Kolkata. \n");
 
 		// footer
 
@@ -310,6 +315,7 @@ public class PdfGenerator {
 
 		letterHead.setWidth(PageSize.A4.getWidth());
 		letterHead.setHeight(160);
+
 		letterHead.setRelativePosition(-23, 0, 0, 0);
 
 		document.add(letterHead);

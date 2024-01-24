@@ -1,0 +1,427 @@
+<%@page import="java.util.List"%>
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.time.LocalDateTime"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Calendar" %>
+<%@ page import="java.util.Locale" %>
+<%@page import="java.util.Date"%>
+<%@ page import="java.text.ParseException" %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+       <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <title>JCI | CMS</title>
+    <!-- GLOBAL MAINLY STYLES-->
+    <link href="./assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="./assets/vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
+    <!-- PLUGINS STYLES-->
+    <!-- THEME STYLES-->
+    <link href="assets/css/main.min.css" rel="stylesheet" />
+    <!-- PAGE LEVEL STYLES-->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- CORE SCRIPTS-->
+  
+ <style>
+.required:after {
+	content: " *";
+	color: red;
+}
+</style> 
+</head>
+<body class="fixed-navbar" onload="myFunction()">
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        <%@ include file="header.jsp"%>
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        <%@ include file="sidebar.jsp"%>
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            <div class="page-heading">
+                <h1 class="page-title">Entry  Generation of Bill of Supply</h1>
+            </div>
+            
+           <%
+    List<Object> getChallanlist = (List<Object>) request.getAttribute("getChallanlist");
+           String billOfSupplyNo = (String) request.getAttribute("billOfSupplyNo");
+           
+           SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+           String serverCurrentDate = dateFormat.format(new Date());
+
+%>
+         
+           
+            
+            
+            <div class="page-content fade-in-up">
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="ibox">
+                          <span>${msg}</span>
+                            <div class="ibox-body">
+                       <form action="saveentryofGenrationbill.obj" method="POST" name ="myForm" enctype="multipart/form-data">
+                           <div class="child-checkbox" id="disableform">
+                                 <div class="row">
+                                       <div class="col-sm-4 form-group">
+	                                             <label>Challan No</label>
+	                                              <span class="text-danger">* </span>&nbsp; <span id="Challan_No" name="Challan_No" class="text-danger"> </span>
+	                                        	 <select name="Challan_No1" id="Challan_No1" class="form-control taxtbox" required>
+	                                        		
+													    <option value="">-Select-</option>
+													    <%
+													    for (Object row : getChallanlist) {
+													       String field1 = (String)row;
+													    %>
+													    <option value="<%= field1 %>"><%= field1 %></option>
+													    <%
+													    }
+													    %> 
+													</select>
+	                                        		
+	                                        
+                                        </div>
+                                         <div class="col-sm-4 form-group">
+												<label>Challan Date</label> 
+												<span class="text-danger">* </span>&nbsp; <span id="Challan_Date" name="Challan_Date" class="text-danger"> </span>
+												<input class="form-control" name="Challan_Date1" id="ChallanDate1"  value="" required  readonly="readonly">
+										   </div>
+										   
+										  
+                                         
+		                                       
+                                         <div class="col-sm-4 form-group">
+												<label>Shipment Details</label> 
+												<span class="text-danger">* </span>&nbsp; <span id="Shipment_Details" name=Shipment_Details class="text-danger"> </span>
+												<input class="form-control" name="Shipment_Details" id="Shipment_Details1"  placeholder="Shipment Details" required>
+										</div> 
+										
+										
+	                                     
+                                 </div>
+                                  
+                                    
+                                    <div class="row">
+                                    
+                                    
+                                    
+                                            <div class="col-sm-4 form-group">
+	                                            <label>Shipment Value</label> 
+	                                            <span class="text-danger">* </span>&nbsp; <span id="Shipment_Value " name="Shipment_Value " class="text-danger" > </span>
+												 <input class="form-control taxtbox" name="Shipment_Value1" min="0" step="1" pattern="\d+"  placeholder="Shipment_Value" required oninput="calculateGST()">
+	                                     </div>
+	                                       
+	                                    
+	                                       <div class="col-sm-4 form-group">
+	                                             <label>SGST Amt</label>
+	                                             <input class="form-control taxtbox" name="SGST_Amt" id="SGST_Amt" min=0 step=0.01 placeholder="SGST_Amt"  readonly="readonly" >
+	                                       </div>
+	                                        <div class="col-sm-4 form-group">
+	                                             <label>CGST Amt</label>
+	                                             <input class="form-control taxtbox" name="CGST_Amt" id="CGST_Amt" min=0 step=0.01 placeholder="CGST_Amt"  readonly="readonly" >
+	                                       </div>
+	                                       
+	                                      
+	                                     
+                                     </div> 
+                                       
+                                   <div class="row">
+                                   
+	                                       
+	                                       
+	                                        <div class="col-sm-4 form-group">
+	                                             <label>IGST Amt</label>
+	                                             <input class="form-control taxtbox" name="IGST_Amt" min="0" step="0.01" pattern="[0-9]*"  id="IGST_Amt" placeholder="IGST_Amt" >
+	                                       </div>
+	                                        <div class="col-sm-4 form-group">
+	                                             <label>TCS Amt</label>
+	                                             <input class="form-control taxtbox" name="TCS_Amt" min="0" step="0.01" pattern="[0-9]*"id="TCS_Amt" placeholder="TCS_Amt"  >
+	                                       </div>
+	                                       
+	                                      <div class="col-sm-4 form-group">
+	                                             <label>TDS Amt</label>
+	                                             <input class="form-control taxtbox" name="TDS_Amt"min="0" step="0.01" pattern="[0-9]*" id="TDS_Amt" placeholder="TDS_Amt"  >
+	                                       </div>
+                                   
+                                        
+	                                        
+	                                     
+	                                       
+	                                      
+	                                       
+	                                     
+	                                       
+	                                       
+                                    </div>  
+                                     
+                                        <div class="row">
+                                        
+                                         <div class="col-sm-4 form-group">
+												<label>Bill of Supply No</label> 
+												<input class="form-control" name="Bill_of_Supply" id="Bill_of_Supply" value="<%=billOfSupplyNo %>" placeholder="Bill_of_Supply"  readonly="readonly" >
+										   </div>
+										   <div class="col-sm-4 form-group">
+	                                             <label>Invoice Value</label>
+	                                             <input class="form-control taxtbox" name="Invoice_Value" id="Invoice_Value" min="0" step="0.01" pattern="[0-9]*"  placeholder="Invoice_Value"   readonly="readonly">
+	                                       </div>
+										   <div class="col-sm-4 form-group">
+												<label>BOS Date</label> 
+												<input class="form-control" name="BOS_Date" id="BOS_Date" value="<%= serverCurrentDate %>" placeholder="BOS_Date"    readonly="readonly">
+										   </div>
+                                   
+                                            
+	                                     
+	                                      
+	                                       
+                                    </div>
+                                       
+                                        <div class="row">
+                                        <div class="col-sm-4 form-group">
+	                                             <label>Supplier Name</label>
+	                                             <input class="form-control taxtbox" name="Supplier_Name" id="Supplier_Name" placeholder="Supplier_Name" 	>
+	                                       </div>
+                                        
+                                         <div class="col-sm-4 form-group">
+												<label>Supplier GSTN</label> 
+												<input class="form-control" name="Supplier_GSTN" id="Supplier_GSTN" placeholder="Supplier_GSTN"  >
+										   </div>
+										   <div class="col-sm-4 form-group">
+												<label>Supplier Address</label> 
+												<input class="form-control" name="Supplier_Address" id="Supplier_Address" placeholder="Supplier_Address" >
+										   </div>
+                                   
+                                            
+	                                     
+	                                      
+	                                       
+                                    </div>
+                                       
+                                        <div class="row">
+
+											<div class="col-sm-4 form-group">
+												<label>Recipient Name</label> <input
+													class="form-control taxtbox" name="Recipient_Name"
+													id="Recipient_Name" placeholder="Recipient_Name">
+											</div>
+
+											<div class="col-sm-4 form-group">
+												<label>Recipient GSTN </label> <input class="form-control taxtbox"
+													name="Recipient_GSTN" id="Recipient_GSTN"
+													placeholder="Recipient_GSTN">
+											</div>
+											<div class="col-sm-4 form-group">
+												<label>Recipient Address</label> <input class="form-control taxtbox"
+													name="Recipient_Address" id="Recipient_Address"
+													placeholder="Recipient_Address">
+
+											</div>
+
+
+
+
+
+										</div>
+         
+                                        <div class="row">
+                                        
+                                         <div class="col-sm-4 form-group">
+	                                             <label>Consignee Name</label>
+	                                             <input class="form-control taxtbox" name="Consignee_Name" id="Consignee_Name"  placeholder="Consignee_Name" 	>
+	                                       </div>
+                                        
+                                         <div class="col-sm-4 form-group">
+												<label>Consignee GSTN </label> 
+												<input class="form-control taxtbox" name="Consignee_GSTN" id="Consignee_GSTN" placeholder="Consignee_GSTN" >
+										   </div>
+										   <div class="col-sm-4 form-group">
+												<label>Consignee Address</label> 
+												<input class="form-control taxtbox" name="Consignee_Address" id="Consignee_Address" placeholder="Consignee_Address"  >
+										   </div>
+                                   
+                                          
+	                                      
+	                                       
+                                    </div>
+                                     <div class="row">
+                                     <div class="col-sm-4 form-group">
+												<label>Contarct no</label> 
+												<span class="text-danger">* </span>&nbsp; <span id="Contarct_no" name="Contarct_no" class="text-danger"> </span>
+												<input class="form-control" name="Contarct_no" id="Contarctno"  value="" readonly="readonly">
+										   </div>
+										   </div>
+	                                     <div class="row"> 
+                                                <div class="col-sm-1 form-group">
+									             <input type="submit" value="Submit"class="btn btn-primary" id="submit" onclick="">
+									            </div>
+									         <!--   <div class="clear">
+												  <button type="submit" value="submit" name="subscribe" id="mc-embedded-subscribe" class="submit- btn btn-default" onclick="window.open('https://login.mailchimp.com/signup'), window.location = 'https://google.com'">Submit</button>
+											   </div>  -->
+											<!--    <div class="col-sm-1 form-group">
+									             <input type="cancel" value="cancel"class="btn btn-primary" id="cancel" onclick="">
+									            </div> -->
+											   
+									          </div>
+                                   </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+            <%@ include file="footer.jsp"%>
+        </div>
+    </div>
+    
+    <div class="sidenav-backdrop backdrop"></div>
+    
+     <script type="text/javascript">
+    
+	$(document).ready(function(){
+		 $("#submit").click(function(){
+		
+			  var contractdate = $("#contractdate").val();
+			  var instdate = $("#instdate").val();
+			  var paymenttype = $("#paymenttype").val();
+			  
+			  if(contractdate =="" || instdate =="")
+				  {
+				    alert("Please select mandatory Fields!");
+				  }
+			  if(paymenttype =="letterofcredit")
+				  {
+					  var dateofship = $("#dateofship").val();
+					  var dateofexpiry = $("#dateofexpiry").val();
+					  if(dateofship =="" || dateofexpiry =="")
+						  {
+						    alert("Please select mandatory Fields!");
+						  }
+				  }
+			  
+		    });
+	 });
+		
+	</script> 
+	
+	
+    
+  
+
+  
+    <script type="text/javascript">
+    
+    $(document).ready(function() {
+    	
+    	function formatDate(date) {
+	        var day = date.getDate().toString().padStart(2, '0');
+	        var month = (date.getMonth() + 1).toString().padStart(2, '0');
+	        var year = date.getFullYear();
+	        return day + '/' + month + '/' + year;
+	    }
+   	    $('#Challan_No1').on('change', function() {
+   	    var field2Value = $(this).val();
+   	   
+   	      $.ajax({
+   	            type: 'GET',
+   	            url: 'fetchingdata1.obj',
+   	            data: { "contractno": field2Value },
+   	            success: function(data) {
+   	            	alert(data);
+   	          /*    var data1 = JSON.parse(data);
+   	          var ChallanDate1 = new Date(data1.Creation_date);
+   	           */ 
+   	           
+   	        try {
+   	            var dataArray = JSON.parse(data);
+
+   	            // Assuming dataArray has the structure: [["Contract No", "Creation Date"]]
+   	            if (dataArray && dataArray.length > 0) {
+   	                var contractNo = dataArray[0][0];
+   	                var creationDateStr = dataArray[0][1];
+
+   	                // Now you can use contractNo and creationDateStr as needed
+   	                console.log("Contract No: " + contractNo);
+   	                console.log("Creation Date: " + creationDateStr);
+
+   	                // Parse the creation date string to a Date object
+   	                var creationDate = new Date(creationDateStr);
+   	                console.log("Creation Date as Date object: ", creationDate);
+   	                
+   	                // Do something with contractNo, creationDate, etc.
+   	                $('#Contarctno').val(contractNo);
+   	                $('#ChallanDate1').val(formatDate(creationDate));
+   	            }
+   	        } catch (error) {
+   	            console.error("Error parsing JSON: " + error);
+   	        }
+   	           
+   	       var formattedDate = formatDate(ChallanDate1);
+   	                 $('#Contarctno').val(data1.Contract_No);
+   	                 $('#ChallanDate1').val(formattedDate);
+   	                 
+   	            }
+   	             
+   	        }); 
+   	    });
+   	});
+
+         
+         </script> 
+  <script>
+    function calculateGST() {
+        // Retrieve the shipment value entered by the user
+        var shipmentValue = parseFloat(document.getElementsByName("Shipment_Value1")[0].value);
+
+        // Check if the entered value is a valid number
+        if (!isNaN(shipmentValue)) {
+            // Calculate SGST and CGST amounts (assuming 18% GST rate)
+            var gstRate = 0.18;
+            var sgstAmt = (gstRate / 2) * shipmentValue;
+            var cgstAmt = (gstRate / 2) * shipmentValue;
+            var totalGstAmt = sgstAmt + cgstAmt;
+            var invoiceValue = shipmentValue + totalGstAmt;
+
+            // Set the calculated amounts to the respective input fields
+            document.getElementById("SGST_Amt").value = sgstAmt.toFixed(2);
+            document.getElementById("CGST_Amt").value = cgstAmt.toFixed(2);
+            document.getElementById("Invoice_Value").value = invoiceValue.toFixed(2);
+        }
+    }
+</script>
+     
+     
+    
+  
+    
+
+
+  
+		  
+    
+    <!-- END PAGA BACKDROPS-->
+    <!-- CORE PLUGINS-->
+    <script src="./assets/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="./assets/vendors/popper.js/dist/umd/popper.min.js" type="text/javascript"></script>
+    <script src="./assets/vendors/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="./assets/vendors/metisMenu/dist/metisMenu.min.js" type="text/javascript"></script>
+    <script src="./assets/vendors/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <!-- PAGE LEVEL PLUGINS-->
+    <!-- CORE SCRIPTS-->
+    <script src="assets/js/app.min.js" type="text/javascript"></script>
+    
+    <!-- PAGE LEVEL SCRIPTS-->
+</body>
+</html>

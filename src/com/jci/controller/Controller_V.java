@@ -1784,12 +1784,7 @@ public class Controller_V {
 
 			Date date3 = new Date();
 			Double flag = 0.0;
-			System.err.println(date3);
-			System.err.println(date3);
-			System.err.println(date3);
-			System.err.println(date3);
-			System.err.println(date3);
-
+		
 			if ("NEFT/RTGS".equalsIgnoreCase(payment)) {
 				autorevolvingamount = "0";
 				entryPaymentDetailsModel.setAutorevolvingamount(autorevolvingamount);
@@ -1951,6 +1946,47 @@ public class Controller_V {
 		}
 	}
 
+	
+	
+	
+	
+	
+	
+	@ResponseBody
+	@RequestMapping("saveRemarksofbill")
+	public ResponseEntity<String> saveRemarksofbill(@RequestParam("remarks") String remarks,@RequestParam("Contract") String contractNo,
+			 HttpServletRequest request,
+			RedirectAttributes redirectAttributes) {
+		final ModelAndView mv = new ModelAndView("EntryGenerationBill");
+
+		String username = (String) request.getSession().getAttribute("usrname");
+		if (username == null) {
+			return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+		}
+		try {
+			this.generationofBillService.remark(remarks, contractNo);
+			
+
+			
+
+			redirectAttributes.addFlashAttribute("msg",
+//
+					"<div class=\"alert alert-success\"><b>Success !</b> Data rejected successfully.</div>");
+			return new ResponseEntity<>("{\"redirect\":\"EntryGenerationBill.obj\"}", HttpStatus.OK);
+
+		} catch (Exception ex) {
+			return new ResponseEntity<>("Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
 	@RequestMapping("saveFinancialConcurence")
 	public ModelAndView saveentryofFC(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		String username = (String) request.getSession().getAttribute("usrname");
@@ -2641,6 +2677,7 @@ public class Controller_V {
 		        
 		        this.generationofBillService.create(generationOfBillSupplyModel);
 		        this.genrationCashDocumentService.create(cashDocumentModel);
+		        this.generationofBillService.billUpdation(Conract_no);
 		        
 		      
 //		        

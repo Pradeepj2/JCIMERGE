@@ -1,6 +1,7 @@
 package com.jci.dao.impl_phase2;
 
 import java.util.List;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -91,6 +92,24 @@ public class GenerationofBillDaoImpl implements GenerationofBillDao {
 		String sql="select  Challan_no,Mill_code  from  jcidispatch_details";
 		 List<Object[]>resultList1= (List<Object[]>)this.sessionFactory.getCurrentSession().createSQLQuery(sql).list();
 	    return resultList1;
+	}
+
+	@Override
+	public String billUpdation(String st) {
+		
+	    String hql = "UPDATE jcidispatch_details set Di_status = 1 where Contract_No = '" + st + "' ";
+	    
+	    String hql1 = "UPDATE jcicontract set contract_status='Bill of Supply Generated' where Contract_no = '" + st + "' ";
+	    this.sessionFactory.getCurrentSession().createSQLQuery(hql1).executeUpdate();
+        this.sessionFactory.getCurrentSession().createSQLQuery(hql).executeUpdate();
+		return hql1;
+		
+	}
+	
+	@Override
+	public void remark(String remark ,String  con_No) {
+		 String hql = "UPDATE  jcibos_generation set Remarks =  '" + remark + "'  where Contractno = '" + con_No + "' ";
+	    this.sessionFactory.getCurrentSession().createSQLQuery(hql).executeUpdate();
 	}
 
 

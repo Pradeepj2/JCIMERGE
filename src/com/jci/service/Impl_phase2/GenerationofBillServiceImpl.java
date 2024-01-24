@@ -67,6 +67,20 @@ public class GenerationofBillServiceImpl implements GenerationofBillService {
 
 
 
+	@Override
+	public  String billUpdation(String st) {
+	
+		return generationofBillDao.billUpdation(st);
+		
+	}
+
+	@Override
+	public void remark(String remark,String  con_No) {
+		generationofBillDao.remark(remark,con_No);
+		
+	}
+
+
 	
 
 

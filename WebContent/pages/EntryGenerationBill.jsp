@@ -283,17 +283,52 @@
 										   </div>
 										   </div>
 	                                     <div class="row"> 
-                                                <div class="col-sm-1 form-group">
-									             <input type="submit" value="Submit"class="btn btn-primary" id="submit" onclick="">
-									            </div>
+                                             
+									               <div class="col-sm-0.7 form-group">
+												             <input type="submit" value="Generate"class="btn btn-primary" id="submit">
+												            </div>
 									         <!--   <div class="clear">
 												  <button type="submit" value="submit" name="subscribe" id="mc-embedded-subscribe" class="submit- btn btn-default" onclick="window.open('https://login.mailchimp.com/signup'), window.location = 'https://google.com'">Submit</button>
 											   </div>  -->
-											<!--    <div class="col-sm-1 form-group">
-									             <input type="cancel" value="cancel"class="btn btn-primary" id="cancel" onclick="">
-									            </div> -->
+											    <div class="col-sm-1 form-group">
+												   <!-- <input type="cancel" value="cancel"class="btn btn-primary" id="cancel"> -->
+												    <!--   <input type='submit' name='submit' id='submitBtn' class='enableOnInput' disabled='disabled' /> -->
+      
+										        <button class="enableOnInput" type="button" id='submitBtn'  disabled='disabled' onclick="rejectAndNavigate()">cancel</button>
+										           
+									             </div> 
+									            </div>
+									        				
+											<div class="modal fade" id="rejectModal" tabindex="-1"
+												role="dialog" aria-labelledby="rejectModalLabel"
+												aria-hidden="true">
+												<div class="modal-dialog" role="document">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="rejectModalLabel">Reject
+																Confirmation</h5>
+															<button type="button" class="close" data-dismiss="modal"
+																aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div class="modal-body">
+															<p>Are you sure you want to reject this record?</p>
+															<label for="remarks">Remarks:</label> <input
+																class="form-control" type="text" id="remarks" name="remarks">
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary"
+																data-dismiss="modal">Close</button>
+															<button type="button" class="btn btn-danger"
+																 id="rejectModalButton" onclick="rejectRecord()">Yes, Reject</button>
+				
+														</div>
+													</div>
+												</div>
+											</div>
 											   
-									          </div>
+									          
                                    </div>
                                 </form>
                             </div>
@@ -336,7 +371,65 @@
 		
 	</script> 
 	
+	<script>
 	
+	 $('#Challan_No1, #Contarctno').on('keyup change',canceltag);
+		$(canceltag() {
+		    if ($('#Challan_No1').val() == '' || $('#Contarctno').val() == '') {
+		      $('.enableOnInput').prop('disabled', true);
+		    } else {
+		      $('.enableOnInput').prop('disabled', false);
+		    }
+		  });
+		})
+	
+	</script>
+	
+	
+<script>
+    function openRejectModal() {
+      
+        $('#rejectModal').modal('show');
+    }
+
+    function closeRejectModal() {
+        $('#rejectModal').modal('hide');
+    }
+
+    function rejectAndNavigate() {
+        openRejectModal()
+        $('#rejectModalButton').off('click').on('click', function () {
+            var remarks = $('#remarks').val().trim();
+
+            if (remarks === "") {
+                return;
+            }
+            $.ajax({
+                type: 'POST',
+                url: 'saveRemarksofbill.obj',
+                data: {
+                    "remarks": remarks,
+                    "con_no": contractNo,
+                },
+                success: function (data) {
+                	alert(data);
+                    var responseData = JSON.parse(data);
+						 if (responseData.redirect) {
+                        window.location.href = responseData.redirect;
+                    } else {
+                        
+                    }
+                },
+                error: function (error) {
+                    console.error('Ajax error:', error);
+                }
+            });
+
+
+            closeRejectModal(); 
+        });
+    }
+</script>
     
   
 
@@ -436,6 +529,7 @@
    	             
    	        }); 
    	    });
+  
    	});
 
          

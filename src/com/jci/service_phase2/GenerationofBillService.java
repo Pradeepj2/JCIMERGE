@@ -18,4 +18,6 @@ public interface GenerationofBillService {
 	  public  List<Object[]>contarctnoformaster(String  st);
 	  public  List<Object[]>Dispatchentry(String  st);
 	  public   String billofsupplyno(String  st);
+	  public String billUpdation(String st);
+	  public void remark(String cont_no,String  con_No);
 }

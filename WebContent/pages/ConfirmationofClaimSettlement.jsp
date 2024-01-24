@@ -235,7 +235,8 @@
 	                                     </div>
 	                                     
 	                                     <div class="col-sm-4 form-group">
-	                                            <label>Inspection by</label> 
+	                                           <!--  <label>Inspection by</label>  -->
+	                                            <label>submitcashdocument</label> 
 	                                            <span class="text-danger">* </span>&nbsp; <span id="Inspection_by" name="Inspection_by " class="text-danger" > </span>
 												 <input class="form-control taxtbox" name="Inspectionby1"   placeholder="Inspection_by" required>
 	                                     </div>
@@ -339,7 +340,7 @@
 
 	                                     <div class="row"> 
                                                 <div class="col-sm-12 form-group">
-									             <input type="submit" value="Submit"class="btn btn-primary" id="submit" onclick="">
+									             <input type="submit" value="submitcashdocument"class="btn btn-primary" id="submit" onclick="">
 									            </div>
 									           <!--  <div class="clear">
 												  <button type="submit" value="submit" name="subscribe" id="mc-embedded-subscribe" class="submit- btn btn-default" onclick="window.open('https://login.mailchimp.com/signup'), window.location = 'https://google.com'">Submit</button>

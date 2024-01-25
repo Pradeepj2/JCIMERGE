@@ -457,10 +457,12 @@
 						"con_no" : contno,
 					},
 					success : function(data) {
-						alert("KKKKKKKKKKKKKKKKKK");
+					
 						var responseData = JSON.parse(data);
 						if (responseData.redirect) {
+							
 							window.location.href = responseData.redirect;
+							
 						} else {
 
 						}

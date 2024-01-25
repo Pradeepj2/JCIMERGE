@@ -1976,7 +1976,7 @@ public class Controller_V {
 			redirectAttributes.addFlashAttribute("msg",
 //
 					"<div class=\"alert alert-success\"><b>Success !</b> Data rejected successfully.</div>");
-			return new ResponseEntity<>("{\"redirect\":\"EntryofMillReceipt.obj\"}", HttpStatus.OK);
+			return new ResponseEntity<>("{\"redirect\":\"EntryofGenerationBillsupply.obj\"}", HttpStatus.OK);
 
 		} catch (Exception ex) {
 			return new ResponseEntity<>("Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -2101,9 +2101,12 @@ public class Controller_V {
 			String MR_No = request.getParameter("MR_No");
 			String MR_Date1 = request.getParameter("MR_Date");
 			String HR_Date1 = request.getParameter("HO_Date");
+			String Mill_code = request.getParameter("Millcode2");
+			System.err.println(Mill_code);
+			
 			//String mill_id = request.getParameter("HO_Date");
 
-			String Mill_Reciept_Qty = request.getParameter("Mill_Reciept_Qty.");
+			String Mill_Reciept_Qty = request.getParameter("Mill_Reciept_Qty");
 			double Mill_Reciept_Qty1 = Double.parseDouble(Mill_Reciept_Qty);
 			String Short_Qty = request.getParameter("Short_Qty");
 			double Short_Qty1 = Double.parseDouble(Short_Qty);
@@ -2170,13 +2173,15 @@ public class Controller_V {
 			// millRecieptModel.setMi(Mill_Reciept_Qty);
 			millRecieptModel.setShort_qty(Short_Qty1);
 			millRecieptModel.setMR_qty(Mill_Reciept_Qty1);
-			millRecieptModel.setMill_id("1");
+			System.out.println(Mill_code);
+			millRecieptModel.setMill_id(Mill_code);
+			//millRecieptModel.setDie(Mill_code);
 			Date date = new Date();
 			// Date currdate = date.toString();
 			millRecieptModel.setCreated_on(date);
 			// millRecieptModel.setHo_date(date);
 			millRecieptModel.setCreated_by("kailash");
-			millRecieptModel.setMR_qty(123.0);
+			//millRecieptModel.setMR_qty(123.0);
 			millRecieptModel.setClaim_status(2);
 
 			this.millRecieptService.create(millRecieptModel);

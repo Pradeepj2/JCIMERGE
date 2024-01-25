@@ -47,19 +47,19 @@ public class MillRecieptModel {
 	@Column( name = "Challan_qty")
 	private Double Challan_qty;
 	
-	
-	@Column( name = "Jute_variety")
-	private String Jute_variety;
-	
-	
-	public String getJute_variety() {
-		return Jute_variety;
-	}
-
-
-	public void setJute_variety(String jute_variety) {
-		Jute_variety = jute_variety;
-	}
+//	
+//	@Column( name = "Jute_variety")
+//	private String Jute_variety;
+//	
+//	
+//	public String getJute_variety() {
+//		return Jute_variety;
+//	}
+//
+//
+//	public void setJute_variety(String jute_variety) {
+//		Jute_variety = jute_variety;
+//	}
 
 
 	@Column( name = "Actual_qty")

@@ -305,6 +305,7 @@ th {
 
     function rejectAndNavigate(contractNo, paymentId) {
         openRejectModal(contractNo)
+       alert("KKKKK");
         $('#rejectModalButton').off('click').on('click', function () {
             var remarks = $('#remarks').val().trim();
 

@@ -108,7 +108,7 @@ public class GenerationofBillDaoImpl implements GenerationofBillDao {
 	
 	@Override
 	public void remark(String remark ,String  con_No) {
-		 String hql = "UPDATE  jcibos_generation set Remarks =  '" + remark + "'  where Contractno = '" + con_No + "' ";
+		 String hql = "UPDATE  jcibos_generation set Remarks =  '" + remark + "'  where Contract_no = '" + con_No + "' ";
 	    this.sessionFactory.getCurrentSession().createSQLQuery(hql).executeUpdate();
 	}
 

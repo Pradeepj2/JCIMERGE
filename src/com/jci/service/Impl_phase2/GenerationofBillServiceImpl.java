@@ -76,6 +76,8 @@ public class GenerationofBillServiceImpl implements GenerationofBillService {
 
 	@Override
 	public void remark(String remark,String  con_No) {
+		System.out.println(remark);
+		System.out.println(con_No);
 		generationofBillDao.remark(remark,con_No);
 		
 	}

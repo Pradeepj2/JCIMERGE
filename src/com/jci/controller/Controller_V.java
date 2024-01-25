@@ -1954,7 +1954,7 @@ public class Controller_V {
 	
 	@ResponseBody
 	@RequestMapping("saveRemarksofbill")
-	public ResponseEntity<String> saveRemarksofbill(@RequestParam("remarks") String remarks,@RequestParam("Contract") String contractNo,
+	public ResponseEntity<String> saveRemarksofbill(@RequestParam("remarks") String remarks,@RequestParam("con_no") String contractNo,
 			 HttpServletRequest request,
 			RedirectAttributes redirectAttributes) {
 		final ModelAndView mv = new ModelAndView("EntryGenerationBill");
@@ -1964,7 +1964,11 @@ public class Controller_V {
 			return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
 		}
 		try {
+			
+			System.err.println(remarks);
+			System.err.println(contractNo);
 			this.generationofBillService.remark(remarks, contractNo);
+			System.err.println("coming");
 			
 
 			
@@ -1972,7 +1976,7 @@ public class Controller_V {
 			redirectAttributes.addFlashAttribute("msg",
 //
 					"<div class=\"alert alert-success\"><b>Success !</b> Data rejected successfully.</div>");
-			return new ResponseEntity<>("{\"redirect\":\"EntryGenerationBill.obj\"}", HttpStatus.OK);
+			return new ResponseEntity<>("{\"redirect\":\"EntryofMillReceipt.obj\"}", HttpStatus.OK);
 
 		} catch (Exception ex) {
 			return new ResponseEntity<>("Error occurred", HttpStatus.INTERNAL_SERVER_ERROR);

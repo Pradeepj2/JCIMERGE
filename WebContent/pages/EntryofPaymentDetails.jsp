@@ -179,7 +179,7 @@
 
 	                                     <div class="row"> 
                                                 <div class="col-sm-12 form-group">
-									             <input type="submit" value="Submit"class="btn btn-primary" id="submit" onclick="">
+									             <input type="submit" value="SubpaymentInstrument"class="btn btn-primary" id="submit" onclick="">
 									            </div>
 									           <!--  <div class="clear">
 												  <button type="submit" value="submit" name="subscribe" id="mc-embedded-subscribe" class="submit- btn btn-default" onclick="window.open('https://login.mailchimp.com/signup'), window.location = 'https://google.com'">Submit</button>

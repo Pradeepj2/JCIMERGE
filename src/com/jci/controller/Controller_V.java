@@ -1784,7 +1784,7 @@ public class Controller_V {
 	@RequestMapping("saveentryofpaymentinstrumentDetails")
 	public ModelAndView saveentryofPID(HttpServletRequest request, RedirectAttributes redirectAttributes,
 			@RequestParam("SupportingDocument") final MultipartFile SupportingDocument) {
-		final File theDir = new File("upload.Imagedownload");
+		final File theDir = new File("C:\\Users\\kailash.shah\\documentimage");
 		if (!theDir.exists()) {
 			theDir.mkdirs();
 		}
@@ -1885,7 +1885,7 @@ public class Controller_V {
 
 	@RequestMapping("downloadSupportingDocument")
 	public void downloadImage(@RequestParam("filename") String filename, HttpServletResponse response) {
-		String imageDirectory = "upload.Imagedownload"; // Replace with your image directory path
+		String imageDirectory = "C:\\Users\\kailash.shah\\documentimage"; // Replace with your image directory path
 		String imagePath = imageDirectory + File.separator + filename;
 
 		File imageFile = new File(imagePath);
@@ -2486,7 +2486,7 @@ public class Controller_V {
 	@RequestMapping("saveConfirmationOfClaimSettelment.obj")
 	public ModelAndView saveConfirmationOfClaimSettelment(HttpServletRequest request,
 			RedirectAttributes redirectAttributes,@RequestParam("SupportingDocument") final MultipartFile SupportingDocument) {
-		 final File theDir = new File("upload.Imagedownload");
+		 final File theDir = new File("C:\\Users\\kailash.shah\\documentimage");
 		    if (!theDir.exists()) {
 		        theDir.mkdirs();
 		    }
@@ -2781,7 +2781,7 @@ public class Controller_V {
 
     @RequestMapping("downloadPDF")
 		 public void downloadPDF(@RequestParam("filename") String filename, HttpServletResponse response) {
-  	  String imageDirectory = "upload.Imagedownload";
+  	  String imageDirectory = "C:\\Users\\kailash.shah\\documentimage";
   	 
 		    String imagePath = imageDirectory + File.separator + filename;
 

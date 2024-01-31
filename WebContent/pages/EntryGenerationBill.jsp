@@ -752,6 +752,8 @@
 
          
          </script>
+         
+         <script>
 		function calculateGST() {
 			// Retrieve the shipment value entered by the user
 			var shipmentValue = parseFloat(document

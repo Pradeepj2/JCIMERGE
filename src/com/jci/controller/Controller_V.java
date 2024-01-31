@@ -1743,7 +1743,7 @@ public class Controller_V {
 	@RequestMapping("saveentryofpaymentinstrumentDetails")
 	public ModelAndView saveentryofPID(HttpServletRequest request, RedirectAttributes redirectAttributes,
 			@RequestParam("SupportingDocument") final MultipartFile SupportingDocument) {
-		final File theDir = new File("upload.Imagedownload");
+		final File theDir = new File("C:\\Users\\kailash.shah\\documentimage");
 		if (!theDir.exists()) {
 			theDir.mkdirs();
 		}
@@ -1844,7 +1844,7 @@ public class Controller_V {
 
 	@RequestMapping("downloadSupportingDocument")
 	public void downloadImage(@RequestParam("filename") String filename, HttpServletResponse response) {
-		String imageDirectory = "upload.Imagedownload"; // Replace with your image directory path
+		String imageDirectory = "C:\\Users\\kailash.shah\\documentimage"; // Replace with your image directory path
 		String imagePath = imageDirectory + File.separator + filename;
 
 		File imageFile = new File(imagePath);
@@ -2454,7 +2454,7 @@ public class Controller_V {
 	@RequestMapping("saveConfirmationOfClaimSettelment.obj")
 	public ModelAndView saveConfirmationOfClaimSettelment(HttpServletRequest request,
 			RedirectAttributes redirectAttributes,@RequestParam("SupportingDocument") final MultipartFile SupportingDocument) {
-		 final File theDir = new File("upload.Imagedownload");
+		 final File theDir = new File("C:\\Users\\kailash.shah\\documentimage");
 		    if (!theDir.exists()) {
 		        theDir.mkdirs();
 		    }
@@ -2709,33 +2709,26 @@ public class Controller_V {
 		    
 		    // Starting Email Sender
           
-           EmailSender email=new EmailSender();
-           InternetAddress[] toAddresses=null;
-           
-            String subject="Bill of Supply attachement";
-           
-             String body = "In this All information regarding Bill of supply . ";
-             
-             String filename="C:\\Users\\kailash.shah\\Downloads\\website.jpg";
-             //String filename = "C:\\Users\\kailash.shah\\documentimage\\" + filePath;
-             String username1="";
-             try {
-                 //toAddresses  = {  new InternetAddress("vishal.vishwakarma@cyfuture.com") ,new InternetAddress("animesh.anand@cyfuture.com")};
-           
-             
-                   toAddresses = new InternetAddress[]{
-                                new InternetAddress("shahkailash2000@gmail.com"),
-                                new InternetAddress("kailashshahsha81@gmail.com")
-                            };
-             
-             } catch (AddressException e) {
-                 // TODO Auto-generated catch block
-                 e.printStackTrace();
-           }
-           
-            email.sendEmail( toAddresses ,  body , subject, filename, username1);
-           
-          
+//           EmailSender email=new EmailSender();
+//           InternetAddress[] toAddresses=null;
+//           String subject="Bill of Supply attachement";
+//           String body = "In this All information regarding Bill of supply . ";
+//             String filename="C:\\Users\\kailash.shah\\Downloads\\website.jpg";
+//             //String filename = "C:\\Users\\kailash.shah\\documentimage\\" + filePath;
+//             String username1="";
+//             try {
+//                 //toAddresses  = {  new InternetAddress("vishal.vishwakarma@cyfuture.com") ,new InternetAddress("animesh.anand@cyfuture.com")};
+//           toAddresses = new InternetAddress[]{
+//                                new InternetAddress("shahkailash2000@gmail.com"),
+//                                new InternetAddress("kailashshahsha81@gmail.com")
+//                            };
+//           } catch (AddressException e) {
+//                 // TODO Auto-generated catch block
+//                 e.printStackTrace();
+//           }
+//           email.sendEmail( toAddresses ,  body , subject, filename, username1);
+////           
+//          
 
 		    
 		    // End Email
@@ -2749,7 +2742,7 @@ public class Controller_V {
 
     @RequestMapping("downloadPDF")
 		 public void downloadPDF(@RequestParam("filename") String filename, HttpServletResponse response) {
-  	  String imageDirectory = "upload.Imagedownload";
+  	  String imageDirectory = "C:\\Users\\kailash.shah\\documentimage";
   	 
 		    String imagePath = imageDirectory + File.separator + filename;
 

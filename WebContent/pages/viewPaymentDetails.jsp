@@ -136,7 +136,7 @@ th {
 										<th>Date of Expiry</th>
 										<th>Last Shipment date</th>
 										<th>Auto Revolving Amount</th>
-										<th>Qty. Allowed</th>
+										<!-- <th>Qty. Allowed</th> -->
 										<th>Supporting Document</th>
 										
 
